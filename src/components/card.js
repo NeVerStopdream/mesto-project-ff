@@ -1,11 +1,10 @@
-
 import {openModal} from './modal.js';
+import {handleProfileFormSubmit} from '../index.js'
 
-function createCard(cardData, deleteCard) {
+function createCard(cardData, deleteCard, likeCard, handleImageClick) {
     const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     const deleteButton = cardElement.querySelector('.card__delete-button');
-    const popUpImg = cardElement.querySelector('.card__image');
     const cardTitle = cardElement.querySelector('.card__title');
     const cardImg = cardElement.querySelector('.card__image');
     const cardLikeBtn = cardElement.querySelector('.card__like-button');
@@ -14,27 +13,28 @@ function createCard(cardData, deleteCard) {
     cardImg.src = cardData.link;
     cardImg.alt = cardData.name;
 
-    cardLikeBtn.addEventListener('click', () => songLike(cardLikeBtn));
+    cardLikeBtn.addEventListener('click', () => {
+        likeCard(cardLikeBtn);
+    });
 
     deleteButton.addEventListener('click', () => { 
         deleteCard(cardElement);
     });
 
-    popUpImg.addEventListener('click', () => openImg(cardData));
+    cardImg.addEventListener('click', () => {
+        handleImageClick(cardData)
+    });
     
     return cardElement;
 };
 
-function songLike(cardLikeBtn) {
+function likeCard(cardLikeBtn) {
     cardLikeBtn.classList.toggle('card__like-button_is-active');
 };
 
-function openImg(cardData) {
-    const popupElement = document.querySelector('.popup_type_image');
-    openModal(popupElement);
-
-    document.querySelector('.popup__image').src = cardData.link;
-    document.querySelector('.popup__caption').textContent = cardData.name;
+function deleteCard(cardElement) {
+    cardElement.remove();
 };
 
-export {createCard};
+
+export {createCard, deleteCard, likeCard};

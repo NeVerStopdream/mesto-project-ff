@@ -1,13 +1,15 @@
+import {handleEscape} from '../index.js';
+
 // функция открытия попап по клику кнопок
 function openModal(popupElement) {
     popupElement.classList.add('popup_is-opened');
-    popupElement.classList.add('popup_is-animated');
-}
+    document.addEventListener('keydown', handleEscape); 
+};
 
 // функция скрытия попап по клику
-function closeModal() {
-    const popupElement = document.querySelector('.popup_is-opened');
+function closeModal(popupElement) {
     popupElement.classList.remove('popup_is-opened');
-}
+    document.removeEventListener('keydown', handleEscape); 
+};
 
-export { openModal, closeModal }; 
+export {openModal, closeModal}; 
