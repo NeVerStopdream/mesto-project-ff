@@ -45,14 +45,6 @@ popUps.forEach((item) => {
       });
 });
 
-// Закрытие модального окна по кнопке esc
-function handleEscape(evt) {
-    if (evt.key === 'Escape') {
-      const openedPopup = document.querySelector('.popup_is-opened');
-      closeModal(openedPopup);
-    };
-};
-
 // Обработчик «отправки» формы
 function handleProfileFormSubmit(evt) {
     evt.preventDefault(); 
@@ -102,5 +94,4 @@ initialCards.forEach((item) => {
     cardsContainer.append(createCard(item, deleteCard, likeCard, handleImageClick));
 });
 
-export {handleEscape, handleProfileFormSubmit}
 

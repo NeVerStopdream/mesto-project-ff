@@ -1,5 +1,3 @@
-import {openModal} from './modal.js';
-import {handleProfileFormSubmit} from '../index.js'
 
 function createCard(cardData, deleteCard, likeCard, handleImageClick) {
     const cardTemplate = document.querySelector('#card-template').content;
