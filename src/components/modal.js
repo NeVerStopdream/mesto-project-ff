@@ -18,5 +18,6 @@ function handleEscape(evt) {
       closeModal(openedPopup);
     };
 };
+  
+export {openModal, closeModal};
 
-export {openModal, closeModal}; 
