@@ -1,0 +1,5 @@
+.button_inactive {
+    border: 1px solid lightgray;
+    color: lightgrey;
+    background-color: transparent;
+}
