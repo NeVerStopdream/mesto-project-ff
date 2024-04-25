@@ -1,37 +1,50 @@
+export const enableValidation = (config) => {
+  const setEventListeners = (formElement, config) => {
+    const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+    const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
-const showInputError = (formElement, inputElement, errorMessage) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add('form__input_type_error');
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('form__input-error_active');
+    toggleButtonState(inputList, buttonElement);
+
+inputList.forEach((inputElement) => {
+  inputElement.addEventListener('input', () => {
+    isValid(formElement, inputElement, config);
+    toggleButtonState(inputList, buttonElement);
+  });
+});
 };
 
-const hideInputError = (formElement, inputElement) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove('form__input_type_error');
-  errorElement.classList.remove('form__input-error_active');
-  errorElement.textContent = '';
-}; 
-
-const isValid = (formElement, inputElement) => {
+const isValid = (formElement, inputElement, config) => {
   if (inputElement.validity.patternMismatch) {
-  inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-} else {
-  inputElement.setCustomValidity("");
-}
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity('');
+  }
 
-if (!inputElement.validity.valid) {
-  showInputError(formElement, inputElement, inputElement.validationMessage);
-} else {
-  hideInputError(formElement, inputElement);
-}
-}; 
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage, config);
+  } else {
+    hideInputError(formElement, inputElement, config);
+  }
+};
+
+const showInputError = (formElement, inputElement, errorMessage, config) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add(config.inputErrorClass);
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add(config.errorClass);
+};
+
+const hideInputError = (formElement, inputElement, config) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove(config.inputErrorClass);
+  errorElement.classList.remove(config.errorClass);
+  errorElement.textContent = '';
+};
 
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
-
     return !inputElement.validity.valid;
-  })
+  });
 };
 
 const toggleButtonState = (inputList, buttonElement) => {
@@ -41,45 +54,30 @@ const toggleButtonState = (inputList, buttonElement) => {
   } else {
     buttonElement.disabled = false;
     buttonElement.classList.remove('button_inactive');
-  } 
-}; 
-
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-  const buttonElement = formElement.querySelector('.popup__button');
-
-  toggleButtonState(inputList, buttonElement);
-
-  inputList.forEach((inputElement) => {
-      inputElement.addEventListener('input', () => {
-      isValid(formElement, inputElement)
-      toggleButtonState(inputList, buttonElement);
-      });
-  });
+  }
 };
 
-//очистка
-//export function clearValidation(formElement) {
- // const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
- // const buttonElement = formElement.querySelector(".popup__button");
-
-  //inputList.forEach((inputElement) => {
-  //  hideInputError(formElement, inputElement);
-  //});
- // buttonElement.disabled = true;
- // buttonElement.classList.add("popup__button_inactive");
-//}
-
-export const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.popup__form'));
+const formList = document.querySelectorAll(config.formSelector);
   formList.forEach((formElement) => {
-      formElement.addEventListener('submit', (evt)=> {
-          evt.preventDefault();
-        });
-        
-      setEventListeners(formElement);
-      //clearValidation(formElement);
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+    setEventListeners(formElement, config);
   });
 };
 
+export function clearValidation(modal, config) {
+  const inputList = modal.querySelectorAll('.popup__input');
+  inputList.forEach(input => {
+    const errorElement = modal.querySelector(`.${input.id}-error`);
+    input.classList.remove('form__input_error');
+    errorElement.textContent = '';
+    errorElement.classList.remove('form__input-error_active');
+  });
+}
 
+// Не получается в функцию по очистке внедрить изменение стиля кнопки, ругается на null в ней
+const disableSubmitButton = (button, config) => {
+  button.disabled = true;
+  button.classList.add(config.inactiveButtonClass);
+};

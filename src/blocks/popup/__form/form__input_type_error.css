@@ -1,4 +1,5 @@
 .form__input_type_error {
     font-size: 12px;
     transition: 0.3s;
+    color: red;
 }

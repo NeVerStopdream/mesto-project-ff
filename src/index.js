@@ -1,7 +1,7 @@
 import './styles/index.css';
 import {createCard, deleteCard, likeCard} from './components/card.js';
 import {openModal, closeModal} from './components/modal.js';
-import { enableValidation } from './components/validation.js';
+import { enableValidation, clearValidation } from './components/validation.js';
 import { getUserInfo, getInitialCards, patchUserInfo, addCard, updateAvatar } from './components/api.js';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -33,9 +33,13 @@ const avatarInput = formEditAvatar['avatar'];
 popupBtnEdit.addEventListener('click', () => {
     openModal(popupEditProfile);
     fillProfileInputs();
+    clearValidation(formElementEdit, enableValidation);
 });
 
-popupBtnAddCard.addEventListener('click', () => openModal(popupAddCard));
+popupBtnAddCard.addEventListener('click', () => {
+  openModal(popupAddCard);
+  clearValidation(formElementAddCard);
+});
 
 // Закрытие модального окна по кнопке крестик
 closePopButtons.forEach((button) => {
@@ -106,16 +110,13 @@ function handleImageClick(cardData) {
 function addNewCard(evt) {
     evt.preventDefault();
     renderLoading(true);
-    //renderLoading(true);
-  
+    
     addCard({
       name: nameImg.value,
       link: urlImg.value
     })
       .then((cardData) => {
         cardsContainer.prepend(createCard(cardData, deleteCard, likeCard, handleImageClick, cardData.owner._id));
-        //clearValidation(popupNewCard, validationConfig);
-        renderLoading(true);
         formElementAddCard.reset();
       })
       .catch((err) => {
@@ -146,16 +147,15 @@ enableValidation({
     inputSelector: ".popup__input",
     submitButtonSelector: ".popup__button",
     inactiveButtonClass: ".button_inactive",
-    inputErrorClass: ".form__input_type_error",
+    inputErrorClass: ".form__input-error_active",
     errorClass: ".form__input-error_active",
   });
   
-//clearValidation();
 
 editAvatarButton.addEventListener('click', function() {
     openModal(popupAvatar);
     avatarInput.value = '';
-    //clearValidation(popupAvatar, validationConfig);
+    clearValidation(formEditAvatar, enableValidation);
   });
 
 formEditAvatar.addEventListener('submit', function(evt) {
@@ -183,3 +183,4 @@ function renderLoading(isLoading) {
         }
     }
 }
+

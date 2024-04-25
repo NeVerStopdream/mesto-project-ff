@@ -7,7 +7,7 @@
 }
 
 .profile__avatar-button:hover {
-    background: rgba(0, 0, 0, .8) url(/Users/vano/Documents/GitHub/mesto-project-ff1/src/images/edit-icon.svg) 50% no-repeat;
+    background: rgba(0, 0, 0, .8) url('../../../images/edit-icon.svg') 50% no-repeat;
     background-size: 26px 26px;
     border: none;
     cursor: pointer;
