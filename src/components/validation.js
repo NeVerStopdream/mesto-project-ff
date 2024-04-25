@@ -66,7 +66,7 @@ const formList = document.querySelectorAll(config.formSelector);
   });
 };
 
-export function clearValidation(modal, config) {
+export function clearValidation(modal) {
   const inputList = modal.querySelectorAll('.popup__input');
   inputList.forEach(input => {
     const errorElement = modal.querySelector(`.${input.id}-error`);
