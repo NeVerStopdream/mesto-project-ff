@@ -1,2 +1,2 @@
 # Проектная работа Mesto
-s
+https://neverstopdream.github.io/mesto-project-ff/
