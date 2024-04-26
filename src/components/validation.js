@@ -3,12 +3,12 @@ export const enableValidation = (config) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
-    toggleButtonState(inputList, buttonElement);
+  toggleButtonState(inputList, buttonElement, config);
 
 inputList.forEach((inputElement) => {
   inputElement.addEventListener('input', () => {
     isValid(formElement, inputElement, config);
-    toggleButtonState(inputList, buttonElement);
+    toggleButtonState(inputList, buttonElement, config);
   });
 });
 };
@@ -34,26 +34,18 @@ const showInputError = (formElement, inputElement, errorMessage, config) => {
   errorElement.classList.add(config.errorClass);
 };
 
-const hideInputError = (formElement, inputElement, config) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove(config.inputErrorClass);
-  errorElement.classList.remove(config.errorClass);
-  errorElement.textContent = '';
-};
-
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });
 };
 
-const toggleButtonState = (inputList, buttonElement) => {
+const toggleButtonState = (inputList, buttonElement, config) => {
   if (hasInvalidInput(inputList)) {
-    buttonElement.disabled = true;
-    buttonElement.classList.add('button_inactive');
+    disableSubmitButton(buttonElement, config);
   } else {
-    buttonElement.disabled = false;
-    buttonElement.classList.remove('button_inactive');
+    buttonElement.disabled = false; 
+    buttonElement.classList.remove(config.inactiveButtonClass); 
   }
 };
 
@@ -66,18 +58,27 @@ const formList = document.querySelectorAll(config.formSelector);
   });
 };
 
-export function clearValidation(modal) {
-  const inputList = modal.querySelectorAll('.popup__input');
-  inputList.forEach(input => {
-    const errorElement = modal.querySelector(`.${input.id}-error`);
-    input.classList.remove('form__input_error');
-    errorElement.textContent = '';
-    errorElement.classList.remove('form__input-error_active');
-  });
-}
+const hideInputError = (formElement, inputElement, config) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove(config.inputErrorClass);
+  errorElement.classList.remove(config.errorClass);
+  errorElement.textContent = '';
+};
 
-// Не получается в функцию по очистке внедрить изменение стиля кнопки, ругается на null в ней
+
 const disableSubmitButton = (button, config) => {
   button.disabled = true;
   button.classList.add(config.inactiveButtonClass);
 };
+
+export function clearValidation(formElement, config) { 
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector)); 
+  const buttonElement = formElement.querySelector(config.submitButtonSelector); 
+ 
+  inputList.forEach(inputElement => { 
+    hideInputError(formElement, inputElement, config); 
+  }); 
+  disableSubmitButton(buttonElement, config); 
+} 
+
+

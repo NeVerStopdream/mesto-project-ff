@@ -33,12 +33,12 @@ const avatarInput = formEditAvatar['avatar'];
 popupBtnEdit.addEventListener('click', () => {
     openModal(popupEditProfile);
     fillProfileInputs();
-    clearValidation(formElementEdit, enableValidation);
+    clearValidation(formElementEdit, validationConfig);
 });
 
 popupBtnAddCard.addEventListener('click', () => {
   openModal(popupAddCard);
-  clearValidation(formElementAddCard);
+  clearValidation(formElementAddCard, validationConfig);
 });
 
 // Закрытие модального окна по кнопке крестик
@@ -142,20 +142,21 @@ Promise.all([getUserInfo(), getInitialCards()])
   });
 
 // Валидация форм
-enableValidation({
-    formSelector: ".popup__form",
-    inputSelector: ".popup__input",
-    submitButtonSelector: ".popup__button",
-    inactiveButtonClass: ".button_inactive",
-    inputErrorClass: ".form__input-error_active",
-    errorClass: ".form__input-error_active",
-  });
+const validationConfig = {
+  formSelector: ".popup__form", 
+  inputSelector: ".popup__input", 
+  submitButtonSelector: ".popup__button", 
+  inactiveButtonClass: "button_inactive", 
+  inputErrorClass: ".form__input-error_active", 
+  errorClass: ".form__input_type_error", 
+ }
   
+ enableValidation(validationConfig); 
 
 editAvatarButton.addEventListener('click', function() {
     openModal(popupAvatar);
     avatarInput.value = '';
-    clearValidation(formEditAvatar, enableValidation);
+    clearValidation(formEditAvatar, validationConfig);
   });
 
 formEditAvatar.addEventListener('submit', function(evt) {

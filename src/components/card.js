@@ -27,6 +27,19 @@ const deleteCallback = (card, cardId) => {
     cardToDelete = card;
     cardToDeleteId = cardId;
 }
+
+function handleLikeButtonClick(evt, cardLikeBtn, cardData, cardLikeCounter) {
+    const likeMethod = cardLikeBtn.classList.contains('card__like-button_is-active') ? deleteLikeCard : likeCards;
+    likeMethod(cardData._id)
+        .then((res) => {
+            cardLikeCounter.textContent = res.likes.length;
+            likeCard(evt);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
   
 function createCard(cardData, deleteCard, likeCard, handleImageClick, userId) {
     const cardTemplate = document.querySelector('#card-template').content;
@@ -55,16 +68,8 @@ function createCard(cardData, deleteCard, likeCard, handleImageClick, userId) {
         deleteCallback(cardElement, cardData._id);
     });
 
-    cardLikeBtn.addEventListener('click', (evt) => {
-        const likeMethod = cardLikeBtn.classList.contains('card__like-button_is-active') ? deleteLikeCard : likeCards;
-        likeMethod(cardData._id)
-            .then((res) => {
-                cardLikeCounter.textContent = res.likes.length;
-                likeCard(evt);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    cardLikeBtn.addEventListener('click', function(evt) {
+        handleLikeButtonClick(evt, cardLikeBtn, cardData, cardLikeCounter);
     });
 
     cardImg.addEventListener('click', () => {
